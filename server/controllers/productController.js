@@ -19,7 +19,7 @@ const uploadProduct = async (req, res) => {
 const getMensData = async (req, res) => {
     try {
         let product = await Product.find({ category: "MEN" })
-        if (product && product.length > 0) {
+        if (product) {
             return response(res, true, 200, 'Data fetched successfully', product)
         }
 
@@ -31,7 +31,7 @@ const getMensData = async (req, res) => {
 const getWomensData = async (req, res) => {
     try {
         let product = await Product.find({ category: "WOMEN" })
-        if (product && product.length > 0) {
+        if (product) {
             return response(res, true, 200, 'Data fetched successfully', product)
         }
     } catch (error) {
@@ -42,7 +42,7 @@ const getWomensData = async (req, res) => {
 const getKidsData = async (req, res) => {
     try {
         let product = await Product.find({ category: "KIDS" })
-        if (product && product.length > 0) {
+        if (product) {
             return response(res, true, 200, 'Data fetched successfully', product)
         }
     } catch (error) {

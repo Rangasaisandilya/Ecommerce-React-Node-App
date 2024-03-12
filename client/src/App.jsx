@@ -12,6 +12,7 @@ import OrdersList from './modules/orders/orders-list/OrdersList';
 import Profile from './modules/users/profile/Profile';
 import Regiser from './modules/users/register/Register';
 import Login from './modules/users/login/Login';
+import ProductDetails from './modules/products/product-details/ProductDetails';
 const App = () => {
   return (
     <div className='App'>
@@ -19,6 +20,7 @@ const App = () => {
         <NavBar />
         <Routes>
           <Route exact path='/' Component={Home} />
+          <Route exact path='/products/:id' Component={ProductDetails} />
           <Route path='/products/men' Component={Mens} />
           <Route path='/products/women' Component={Womens} />
           <Route path='/products/kids' Component={Kids} />

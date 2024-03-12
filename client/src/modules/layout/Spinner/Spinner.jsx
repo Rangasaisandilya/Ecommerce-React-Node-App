@@ -1,9 +1,10 @@
-import React from "react"
+import React from "react";
+import spinnergif from '../../../assets/img/spinner.gif';
 
 const Spinner =()=>{
   return(
       <React.Fragment>
-        <h1>Spinner</h1>
+        <img src ={spinnergif} alt="spinner" className="d-block m-auto"/>
       </React.Fragment>
     )
 

@@ -58,7 +58,7 @@ const loginUser = async (req, res) => {
         // verify the password
         let isMatch = await bycrypt.compare(password, user.password)
         if (!isMatch) {
-            response(res, false, 401, 'Invalid password', null)
+            response(res, false, 401, 'User Name or password is incorrect', null)
         }
         // create a token and send to client
         let payload = {

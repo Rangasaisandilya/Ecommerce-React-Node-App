@@ -1,10 +1,27 @@
-import React from "react"
-import men_1 from "../../../assets/img/products/mens/men_1.jpg"
-import men_2 from "../../../assets/img/products/mens/men_2.jpg"
-import men_3 from "../../../assets/img/products/mens/men_3.jpg"
-import men_4 from "../../../assets/img/products/mens/men_4.jpg"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from 'react-redux';
+import { getMensCollection } from "../../../redux/Actions/Products/productActions"
+import Spinner from "../../layout/Spinner/Spinner"
+import { Link, useNavigate } from "react-router-dom";
+import { addToCart } from "../../../redux/Reducers/orders/orderSlice";
 
 const Mens = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, products } = useSelector((store) => store.products);
+
+
+  useEffect(() => {
+    dispatch(getMensCollection())
+  }, [dispatch])
+
+  const handleaddToCart = (product) => {
+    const updatedProduct = { ...product, qty: 1 }
+    dispatch(addToCart(updatedProduct));
+    navigate("/orders/cart");
+  }
+
+
   return (
     <React.Fragment>
       <section className="bg-brains p-3">
@@ -16,93 +33,55 @@ const Mens = () => {
           </div>
         </div>
       </section>
-      <section className="my-3">
-        <div className="container">
-          <div className="row animated zoomIn">
-            <div className="col-md-3">
-              <div className="card">
-                <div className="card-header bg-white ">
-                  <img src={men_1} className="img-fluid" />
-                </div>
-                <div className="card-body text-center">
-                  <ul className="list-group">
-                    <li className="list-group-item">
-                      <p className="h6">Mens fit shirt</p>
-                    </li>
-                    <li className="list-group-item">
-                      <p className="h6">&#8377; 1950.00</p>
-                    </li>
-                    <li className="list-group-item">
-                      <button className="btn btn-success btn-sm">Add to cart</button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card">
-                <div className="card-header bg-white">
-                  <img src={men_2} className="img-fluid" />
-                </div>
-                <div className="card-body text-center">
-                  <ul className="list-group">
-                    <li className="list-group-item">
-                      <p className="h6">Mens fit shirt</p>
-                    </li>
-                    <li className="list-group-item">
-                      <p className="h6">&#8377; 1950.00</p>
-                    </li>
-                    <li className="list-group-item">
-                      <button className="btn btn-success btn-sm">Add to cart</button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card">
-                <div className="card-header bg-white">
-                  <img src={men_3} className="img-fluid" />
-                </div>
-                <div className="card-body text-center">
-                  <ul className="list-group">
-                    <li className="list-group-item">
-                      <p className="h6">Mens fit shirt</p>
-                    </li>
-                    <li className="list-group-item">
-                      <p className="h6">&#8377; 1950.00</p>
-                    </li>
-                    <li className="list-group-item">
-                      <button className="btn btn-success btn-sm">Add to cart</button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card">
-                <div className="card-header bg-white">
-                  <img src={men_4} className="img-fluid" />
-                </div>
-                <div className="card-body text-center">
-                  <ul className="list-group">
-                    <li className="list-group-item">
-                      <p className="h6">Mens fit shirt</p>
-                    </li>
-                    <li className="list-group-item">
-                      <p className="h6">&#8377; 1950.00</p>
-                    </li>
-                    <li className="list-group-item">
-                      <button className="btn btn-success btn-sm">Add to cart</button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
+      {
+        loading ?
+          <Spinner /> :
+          <React.Fragment>
+            {
+              products && Array.isArray(products) && products?.length > 0 ?
+                <React.Fragment>
+                  <section className="my-3">
+                    <div className="container">
+                      <div className="row">
+                        {
+                          products.map((product) => (
+                            <div className="col-md-3" key={product?._id}>
+                              <div className="card animated zoomIn">
+                                <div className="card-header bg-white ">
+                                  <Link to={`/products/${product?._id}`}>
+                                    <img src={product?.image} alt="" className="img-fluid" />
+                                  </Link>
+                                </div>
+                                <div className="card-body text-center">
+                                  <ul className="list-group">
+                                    <li className="list-group-item">
+                                      <p className="h6">{product?.name}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                      <p className="h6">&#8377; {product?.price?.toFixed(2)}</p>
+                                    </li>
+                                    <li className="list-group-item">
+                                      <button className="btn btn-success btn-sm" onClick={()=> handleaddToCart(product)}>Add to cart</button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    </div>
+                  </section>
 
-        </div>
-      </section>
+                </React.Fragment> :
+                <React.Fragment>
+                  <p className="h3 text-danger mt-5 text-center">No Data found</p>
+                </React.Fragment>
+            }
+
+          </React.Fragment>
+      }
+
     </React.Fragment>
   )
 

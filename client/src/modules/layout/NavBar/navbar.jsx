@@ -1,8 +1,50 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from "react"
-import { Link } from "react-router-dom"
+import React, { Fragment } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from "../../../redux/Reducers/users/userSlice";
 
 const NavBar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, isAuthenticated, user } = useSelector((store) => store.users);
+  const {cartItems}= useSelector((store) => store.orders);
+
+
+  const logoutUser = () => {
+       dispatch(logOut())
+       navigate('/')
+  }
+
+
+  let beforeLinks = (
+    <Fragment>
+        <li className="nav-item">
+            <Link to='/users/login' className="nav-link">Login</Link>
+        </li>
+        <li className="nav-item">
+            <Link to='/users/register' className="nav-link">Register</Link>
+        </li>
+    </Fragment>
+);
+
+let afterLinks = (
+    <React.Fragment>
+        {
+            user ? <li className="nav-item">
+                <Link to='/users/profile' className="nav-link">
+                    <img src={user.avatar} alt="" width="20" height="20" className="rounded-circle" />
+                    &nbsp;{user.name}</Link>
+            </li> : null
+        }
+        <li className="nav-item">
+            <Link to='#' onClick={logoutUser} className="nav-link">Logout</Link>
+        </li>
+    </React.Fragment>
+);
+  
+
+
   return (
     <React.Fragment>
       <nav className="navbar navbar-dark bg-dark navbar-expand">
@@ -23,40 +65,38 @@ const NavBar = () => {
               </li>
               <li className="nav-item">
                 {
-
+                  user && user.isAdmin &&
                   <Link to="/products/upload" className="nav-link">Upload</Link>
                 }
               </li>
               <li className="nav-item">
                 <Link to="/orders/cart" className="nav-link">
                   <i className="fas fa-shopping-cart" />
-                  <span className="badge badge-success">10</span>
+                  <span className="badge badge-success">{cartItems?.length}</span>
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 {
                   <Link to="/orders/checkout" className="nav-link">Checkout</Link>
                 }
-              </li>
+              </li> */}
               <li className="nav-item">
                 {
+                  user && user.isAdmin &&
                   <Link to="/orders/list" className="nav-link">Order List</Link>
                 }
               </li>
             </ul>
-            <ul className="nav navbar-nav ml-auto">
-            <li className="nav-item">
-                <Link to="/users/profile" className="nav-link">Profile</Link>
-              </li>
-            <li className="nav-item">
-                <Link to="/users/login" className="nav-link">Login</Link>
-                
-              </li>
-              <li className="nav-item">
-                <Link to="/users/register" className="nav-link">Register</Link>
-              </li>
+            <ul className="navbar-nav ml-auto">
+              {
+                !loading &&
+                <React.Fragment>
+                  {
+                    !isAuthenticated ? beforeLinks : afterLinks
+                  } 
+                </React.Fragment>
+              }
             </ul>
-            
           </div>
         </div>
       </nav>
