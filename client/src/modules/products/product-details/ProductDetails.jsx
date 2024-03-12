@@ -69,7 +69,7 @@ const ProductDetails = () => {
                             </div>
                           </form>
                           <div>
-                            <button className="btn btn-brains text-dark btn-sm mt-2" onClick={() =>clickAddToCart()} disabled={!productQty}>Add to Cartz</button>
+                            <button className="btn btn-brains text-dark btn-sm mt-2" onClick={() =>clickAddToCart()} disabled={!productQty}>Add to Cart</button>
                           </div>
                           <p>{selectedProduct?.description}</p>
                           <p>{selectedProduct?.usage}</p>
