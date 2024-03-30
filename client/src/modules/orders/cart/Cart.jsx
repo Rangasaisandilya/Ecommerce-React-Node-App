@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../layout/Spinner/Spinner";
 import { changeProuctQuantity, deleteItemfromCart } from "../../../redux/Reducers/orders/orderSlice";
+import swal from "sweetalert";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,20 @@ let calcTax = () => {
 let calcGrandTotal = () => {
     return calcTotal() + calcTax();
 };
+
+const handleProductIncrement =(cartItem)=>{
+  if (cartItem?.qty >= 5) {
+    swal({
+      title: "Maximum quantity reached",
+      icon: "error",
+      button: "Ok",
+    });
+  }
+  else {
+    dispatch(changeProuctQuantity({ type: "increment", productId: cartItem._id }))
+  }
+  
+}
 
 
   return (
@@ -100,7 +115,7 @@ let calcGrandTotal = () => {
                                             />
                                             {cartItem.qty}
                                             <i className="fa fa-plus-circle mx-1 cursor-pointer" 
-                                             onClick={() => dispatch(changeProuctQuantity({ type: "increment", productId: cartItem._id }))}
+                                             onClick={() => handleProductIncrement(cartItem)}
                                             />
                                           </td>
                                           <td>&#8377; {cartItem.price.toFixed(2)}</td>
@@ -117,7 +132,6 @@ let calcGrandTotal = () => {
                                 </tbody>
                               </table>
                             </div>
-
                           </div>
                         </div>
                         <div className="col-md-4 animated zoomInRight">
